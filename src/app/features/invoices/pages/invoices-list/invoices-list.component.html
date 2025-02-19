@@ -52,7 +52,7 @@
 
     <ng-template pTemplate="body" let-invoice>
       <tr class="border-b border-gray-100 hover:bg-gray-50">
-        <td class="p-4">{{ invoice.id }}</td>
+        <td class="p-4">{{ invoice._id }}</td>
         <td class="p-4">{{ invoice.createdAt | date : "medium" }}</td>
         <td class="p-4">
           <div *ngFor="let item of invoice.items" class="mb-1 text-gray-600">

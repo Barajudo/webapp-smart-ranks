@@ -7,5 +7,5 @@ export interface Product {
   status: 'active' | 'inactive';
 }
 
-export interface CreateProductDto extends Omit<Product, 'id'> {}
+export interface CreateProductDto extends Omit<Product, 'id' | 'createdAt' | 'updatedAt'> {}
 export interface UpdateProductDto extends Partial<Product> {}

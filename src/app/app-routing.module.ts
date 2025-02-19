@@ -40,6 +40,10 @@ const routes: Routes = [
         loadChildren: () => import('./features/invoices/invoices.module').then(m => m.InvoicesModule)
       },
       {
+        path: 'users',
+        loadChildren: () => import('./features/users/users.module').then(m => m.UsersModule)
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'

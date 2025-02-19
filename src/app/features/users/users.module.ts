@@ -1,43 +1,33 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ProductsRoutingModule } from './products-routing.module';
-import { ProductsListComponent } from './pages/products-list/products-list.component';
-
-// PrimeNG
+import { UsersRoutingModule } from './users-routing.module';
+import { UsersListComponent } from './pages/users-list/users-list.component';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
-import { TextareaModule } from 'primeng/textarea';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { SelectButtonModule } from 'primeng/selectbutton';
 import { TagModule } from 'primeng/tag';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { SelectModule } from 'primeng/select';
 
 @NgModule({
-  declarations: [
-    ProductsListComponent
-  ],
+  declarations: [UsersListComponent],
   imports: [
     CommonModule,
-    ProductsRoutingModule,
     FormsModule,
+    UsersRoutingModule,
     TableModule,
     ToastModule,
     ToolbarModule,
     ButtonModule,
     DialogModule,
     InputTextModule,
-    TextareaModule,
-    InputNumberModule,
-    SelectButtonModule,
     TagModule,
     ConfirmDialogModule,
-    SelectModule
-  ]
+    SelectModule,
+  ],
 })
-export class ProductsModule { }
+export class UsersModule {}
