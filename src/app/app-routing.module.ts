@@ -7,20 +7,27 @@ import { MainLayoutComponent } from './shared/layout/main-layout/main-layout.com
 
 @Component({
   template: `
-    <div class="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-gray-50">
+    <div
+      class="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-gray-50"
+    >
       <div class="text-center">
-        <h2 class="text-4xl font-bold text-gray-900 mb-4">Welcome to Smart Ranks</h2>
-        <p class="text-lg text-gray-600">Select an option from the menu to get started</p>
+        <h2 class="text-4xl font-bold text-gray-900 mb-4">
+          Welcome to Smart Ranks
+        </h2>
+        <p class="text-lg text-gray-600">
+          Select an option from the menu to get started
+        </p>
       </div>
     </div>
-  `
+  `,
 })
 export class DashboardComponent {}
 
 const routes: Routes = [
   {
     path: 'auth',
-    loadChildren: () => import('./features/auth/auth.module').then(m => m.AuthModule)
+    loadChildren: () =>
+      import('./features/auth/auth.module').then((m) => m.AuthModule),
   },
   {
     path: '',
@@ -29,38 +36,54 @@ const routes: Routes = [
     children: [
       {
         path: 'dashboard',
-        component: DashboardComponent
+        component: DashboardComponent,
       },
       {
         path: 'users',
-        loadChildren: () => import('./features/users/users.module').then(m => m.UsersModule),
+        loadChildren: () =>
+          import('./features/users/users.module').then((m) => m.UsersModule),
         canActivate: [RoleGuard],
-        data: { roles: ['admin', 'user'] }
+        data: { roles: ['admin', 'user'] },
       },
       {
         path: 'products',
-        loadChildren: () => import('./features/products/products.module').then(m => m.ProductsModule),
+        loadChildren: () =>
+          import('./features/products/products.module').then(
+            (m) => m.ProductsModule
+          ),
         canActivate: [RoleGuard],
-        data: { roles: ['admin', 'user'] }
+        data: { roles: ['admin', 'user'] },
       },
       {
         path: 'invoices',
-        loadChildren: () => import('./features/invoices/invoices.module').then(m => m.InvoicesModule),
+        loadChildren: () =>
+          import('./features/invoices/invoices.module').then(
+            (m) => m.InvoicesModule
+          ),
         canActivate: [RoleGuard],
-        data: { roles: ['admin', 'user'] }
+        data: { roles: ['admin', 'user'] },
+      },
+      {
+        path: 'analytics',
+        loadChildren: () =>
+          import('./features/analytics/analytics.module').then(
+            (m) => m.AnalyticsModule
+          ),
+        canActivate: [RoleGuard],
+        data: { roles: ['admin'] },
       },
       {
         path: '',
         redirectTo: 'dashboard',
-        pathMatch: 'full'
-      }
-    ]
-  }
+        pathMatch: 'full',
+      },
+    ],
+  },
 ];
 
 @NgModule({
   declarations: [DashboardComponent],
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

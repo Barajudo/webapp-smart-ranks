@@ -35,6 +35,12 @@ export class MainLayoutComponent implements OnInit {
       label: 'Users',
       icon: 'pi pi-users',
       route: '/users'
+    },
+    {
+      label: 'Analytics',
+      icon: 'pi pi-chart-bar',
+      route: '/analytics',
+      roles: ['admin'] 
     }
   ];
 

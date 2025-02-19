@@ -1,0 +1,78 @@
+<div class="bg-white rounded-lg shadow-sm p-6">
+  <p-toast></p-toast>
+
+  <p-toolbar styleClass="mb-6 bg-gray-50 border border-gray-200">
+    <ng-template pTemplate="left">
+      <div class="flex items-center gap-4">
+        <p-dropdown
+          [options]="users"
+          optionLabel="name"
+          optionValue="_id"
+          placeholder="Select a User"
+          [(ngModel)]="selectedUserId"
+          (onChange)="onUserChange()"
+        ></p-dropdown>
+        <span class="ml-4 text-gray-600">
+          Last Month Purchases:
+          <strong>{{ monthlyCount }}</strong>
+        </span>
+      </div>
+    </ng-template>
+  </p-toolbar>
+
+  <p-table
+    [value]="invoices"
+    [rows]="10"
+    [paginator]="true"
+    [loading]="loading"
+    [rowHover]="true"
+    dataKey="_id"
+    styleClass="p-datatable-sm"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [showCurrentPageReport]="true"
+    [globalFilterFields]="['_id', 'total']"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex items-center justify-between mb-4">
+        <h5 class="text-xl font-medium text-gray-700 m-0">
+          Invoices (Last Month)
+        </h5>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr class="bg-gray-50">
+        <th class="p-4 font-medium text-gray-700">Invoice #</th>
+        <th class="p-4 font-medium text-gray-700">Date</th>
+        <th class="p-4 font-medium text-gray-700">Items</th>
+        <th class="p-4 font-medium text-gray-700 text-right">Total</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-invoice>
+      <tr class="border-b border-gray-100 hover:bg-gray-50">
+        <td class="p-4">{{ invoice._id }}</td>
+        <td class="p-4">
+          {{ invoice.createdAt | date : "medium" }}
+        </td>
+        <td class="p-4">
+          <div *ngFor="let item of invoice.items" class="mb-1 text-gray-600">
+            Product ID: {{ item.productId }}
+            <span class="text-gray-500">(x{{ item.quantity }})</span>
+          </div>
+        </td>
+        <td class="p-4 text-right font-medium">
+          {{ invoice.total | currency : "USD" }}
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="4" class="text-center p-4 text-gray-500">
+          No invoices in the last month
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
