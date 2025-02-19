@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Observable, throwError, forkJoin } from 'rxjs';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { Invoice, CreateInvoiceDto } from '../interfaces/invoice.interface';
+import { ProductsService } from '../../products/services/products.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,10 @@ import { Invoice, CreateInvoiceDto } from '../interfaces/invoice.interface';
 export class InvoicesService {
   private apiUrl = `${environment.apiUrl}/invoices`;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private productsService: ProductsService
+  ) {}
 
   getInvoices(): Observable<Invoice[]> {
     return this.http.get<Invoice[]>(this.apiUrl)
@@ -25,7 +29,14 @@ export class InvoicesService {
 
   createInvoice(data: CreateInvoiceDto): Observable<Invoice> {
     return this.http.post<Invoice>(this.apiUrl, data)
-      .pipe(catchError(this.handleError));
+      .pipe(
+        tap(response => console.log('Invoice creation response:', response)),
+        catchError(error => {
+          console.error('Error creating invoice:', error);
+          console.error('Error details:', error.error);
+          return this.handleError(error);
+        })
+      );
   }
 
   getMonthlyPurchases(userId: string): Observable<number> {
@@ -33,12 +44,20 @@ export class InvoicesService {
       .pipe(catchError(this.handleError));
   }
 
+  getInvoicesByUser(userId: string): Observable<Invoice[]> {
+    return this.http
+      .get<Invoice[]>(`${this.apiUrl}/user/${userId}`)
+      .pipe(catchError(this.handleError));
+  }
+  
+
   private handleError(error: HttpErrorResponse) {
-    console.error('An error occurred:', error);
+    let errorMessage = 'An error occurred';
     if (error.error instanceof ErrorEvent) {
-      return throwError(() => new Error('Client-side error occurred'));
+      errorMessage = error.error.message;
     } else {
-      return throwError(() => new Error(error.error?.message || 'Server-side error occurred'));
+      errorMessage = error.error?.message || 'Server error';
     }
+    return throwError(() => new Error(errorMessage));
   }
 }

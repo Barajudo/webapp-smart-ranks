@@ -11,13 +11,10 @@ export class AuthGuard {
     private router: Router
   ) {}
 
-  canActivate(): boolean | UrlTree {
-    console.log('AuthGuard.canActivate - isLoggedIn:', this.authService.isLoggedIn());
-    
+  canActivate(): boolean | UrlTree {   
     if (this.authService.isLoggedIn()) {
       return true;
     }
-    
     return this.router.createUrlTree(['/auth/login']);
   }
 }

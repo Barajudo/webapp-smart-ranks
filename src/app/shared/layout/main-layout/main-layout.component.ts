@@ -1,4 +1,3 @@
-// src/app/shared/layout/main-layout/main-layout.component.ts
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../features/auth/services/auth.service';
@@ -35,8 +34,7 @@ export class MainLayoutComponent implements OnInit {
     {
       label: 'Users',
       icon: 'pi pi-users',
-      route: '/users',
-      roles: ['admin']
+      route: '/users'
     }
   ];
 
@@ -50,9 +48,7 @@ export class MainLayoutComponent implements OnInit {
   ngOnInit() {
     this.userEmail = localStorage.getItem('userEmail');
     this.userRole = this.authService.getUserRole();
-    this.menuItems = this.menuItems.filter(item => 
-      !item.roles || item.roles.includes(this.userRole || '')
-    );
+    
   }
 
   logout() {

@@ -30,6 +30,7 @@ export class UsersService {
   }
 
   getUser(id: string): Observable<User> {
+    console.log({id})
     return this.http
       .get<User>(`${this.apiUrl}/${id}`)
       .pipe(catchError(this.handleError));

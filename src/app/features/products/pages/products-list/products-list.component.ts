@@ -6,6 +6,7 @@ import {
 } from '../../interfaces/product.interface';
 import { ProductsService } from '../../services/products.service';
 import { MessageService, ConfirmationService } from 'primeng/api';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-products-list',
@@ -19,6 +20,8 @@ export class ProductsListComponent implements OnInit {
   productDialog: boolean = false;
   submitted: boolean = false;
   loading: boolean = false;
+  currentUserRole: string = '';
+  currentUserId: string = '';
 
   constructor(
     private productsService: ProductsService,
@@ -27,6 +30,8 @@ export class ProductsListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.currentUserRole = localStorage.getItem('userRole') || '';
+    this.currentUserId = localStorage.getItem('userId') || '';
     this.loadProducts();
   }
 
@@ -49,12 +54,29 @@ export class ProductsListComponent implements OnInit {
   }
 
   openNew() {
+    if (this.currentUserRole !== 'admin') {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Unauthorized',
+        detail: 'Only admin can create products',
+      });
+      return;
+    }
+
     this.product = this.getEmptyProduct();
     this.submitted = false;
     this.productDialog = true;
   }
 
-  deleteProduct(product: any) {  
+  deleteProduct(product: Product) {
+    if (this.currentUserRole !== 'admin') {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Unauthorized',
+        detail: 'Only admin can delete products',
+      });
+      return;
+    }
     this.confirmationService.confirm({
       message: `Are you sure you want to delete ${product.name}?`,
       header: 'Confirm Deletion',
@@ -65,7 +87,7 @@ export class ProductsListComponent implements OnInit {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: 'Product ID not found'
+            detail: 'Product ID not found',
           });
           return;
         }
@@ -75,20 +97,20 @@ export class ProductsListComponent implements OnInit {
             this.messageService.add({
               severity: 'success',
               summary: 'Success',
-              detail: 'Product deleted successfully'
+              detail: 'Product deleted successfully',
             });
-            this.loadProducts(); 
+            this.loadProducts();
           },
           error: (error) => {
             console.error('Delete error:', error);
             this.messageService.add({
               severity: 'error',
               summary: 'Error',
-              detail: error.message || 'Error deleting product'
+              detail: error.message || 'Error deleting product',
             });
-          }
+          },
         });
-      }
+      },
     });
   }
 
@@ -97,7 +119,15 @@ export class ProductsListComponent implements OnInit {
     this.submitted = false;
   }
 
-  editProduct(product: any) {
+  editProduct(product: Product) {
+    if (this.currentUserRole !== 'admin') {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Unauthorized',
+        detail: 'Only admin can edit products',
+      });
+      return;
+    }
     const transformedProduct: Product = {
       _id: product._id,
       name: product.name,
@@ -185,5 +215,9 @@ export class ProductsListComponent implements OnInit {
       stock: 0,
       status: 'active',
     };
+  }
+
+  onGlobalFilter(table: Table, event: Event) {
+    table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
 }

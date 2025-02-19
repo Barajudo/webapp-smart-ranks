@@ -1,7 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { User, CreateUserDto, UpdateUserDto, UserRole } from '../../interfaces/user.interface';
+import {
+  User,
+  CreateUserDto,
+  UpdateUserDto,
+  UserRole,
+} from '../../interfaces/user.interface';
 import { UsersService } from '../../services/users.service';
 import { MessageService, ConfirmationService } from 'primeng/api';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-users-list',
@@ -16,6 +22,8 @@ export class UsersListComponent implements OnInit {
   submitted = false;
   loading = false;
   confirmPassword = '';
+  currentUserRole: string = '';
+  currentUserId: string = '';
 
   constructor(
     private usersService: UsersService,
@@ -24,25 +32,45 @@ export class UsersListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.currentUserRole = localStorage.getItem('userRole') || '';
+    this.currentUserId = localStorage.getItem('userId') || '';
     this.loadUsers();
   }
 
   loadUsers() {
     this.loading = true;
-    this.usersService.getUsers().subscribe({
-      next: (data) => {
-        this.users = data;
-        this.loading = false;
-      },
-      error: (error) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: error.message,
-        });
-        this.loading = false;
-      },
-    });
+    if (this.currentUserRole === 'admin') {
+      this.usersService.getUsers().subscribe({
+        next: (data) => {
+          this.users = data;
+          this.loading = false;
+        },
+        error: (error) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.message,
+          });
+          this.loading = false;
+        },
+      });
+    } else {
+      this.usersService.getUser(this.currentUserId).subscribe({
+        next: (oneUser) => {
+          console.log({ oneUser });
+          this.users = [oneUser]; 
+          this.loading = false;
+        },
+        error: (error) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.message,
+          });
+          this.loading = false;
+        },
+      });
+    }
   }
 
   openNew() {
@@ -59,6 +87,24 @@ export class UsersListComponent implements OnInit {
   }
 
   deleteUser(u: User) {
+    if (this.currentUserRole !== 'admin') {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'No tienes permisos para eliminar usuarios',
+      });
+      return;
+    }
+
+    if (u._id === this.currentUserId) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Warning',
+        detail: 'You cannot delete your own user account',
+      });
+      return;
+    }
+
     this.confirmationService.confirm({
       message: `Are you sure you want to delete ${u.name}?`,
       header: 'Confirm Deletion',
@@ -113,7 +159,7 @@ export class UsersListComponent implements OnInit {
       const changes: UpdateUserDto = {
         name: this.user.name,
         email: this.user.email,
-        role: this.user.role
+        role: this.user.role,
       };
       this.usersService.updateUser(this.user._id, changes).subscribe({
         next: () => {
@@ -181,7 +227,11 @@ export class UsersListComponent implements OnInit {
       name: '',
       email: '',
       password: '',
-      role: UserRole.USER
+      role: UserRole.USER,
     };
+  }
+
+  onGlobalFilter(table: Table, event: Event) {
+    table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
 }
