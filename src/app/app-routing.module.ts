@@ -1,15 +1,13 @@
-// src/app/app-routing.module.ts
-import { Component, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
 import { RoleGuard } from './core/guards/role.guard';
 import { MainLayoutComponent } from './shared/layout/main-layout/main-layout.component';
+import { Component } from '@angular/core';
 
 @Component({
   template: `
-    <div
-      class="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-gray-50"
-    >
+    <div class="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-gray-50">
       <div class="text-center">
         <h2 class="text-4xl font-bold text-gray-900 mb-4">
           Welcome to Smart Ranks
@@ -19,7 +17,7 @@ import { MainLayoutComponent } from './shared/layout/main-layout/main-layout.com
         </p>
       </div>
     </div>
-  `,
+  `
 })
 export class DashboardComponent {}
 
