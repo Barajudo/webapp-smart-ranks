@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
+import { LayoutModule } from './shared/layout/layout.module';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import Aura from '@primeng/themes/aura';
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
+    LayoutModule
   ],
   providers: [
     provideAnimationsAsync(),

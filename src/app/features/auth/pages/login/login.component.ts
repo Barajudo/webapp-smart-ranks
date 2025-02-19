@@ -3,11 +3,11 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { AuthService } from '../../services/auth.service';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
   providers: [MessageService]
 })
 export class LoginComponent {
@@ -30,17 +30,19 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.loading = true;
       this.authService.login(this.loginForm.value)
+        .pipe(
+          finalize(() => this.loading = false)
+        )
         .subscribe({
-          next: () => {
-            this.router.navigate(['/']);
+          next: (response) => {
+            this.router.navigate(['/dashboard']);
           },
           error: (error) => {
             this.messageService.add({
               severity: 'error',
               summary: 'Error',
-              detail: 'Invalid credentials'
+              detail: error.error?.message || 'Invalid credentials'
             });
-            this.loading = false;
           }
         });
     }

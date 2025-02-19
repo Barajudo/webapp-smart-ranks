@@ -1,0 +1,85 @@
+<div class="min-h-screen surface-ground flex relative">
+    <!-- Sidebar -->
+    <aside class="surface-card shadow-2 hidden md:block flex-shrink-0" style="width: 280px;">
+        <div class="flex flex-column h-full">
+            <!-- Logo/Title -->
+            <div class="p-4 border-bottom-1 surface-border flex align-items-center">
+                <span class="text-xl font-medium text-900">Smart Ranks</span>
+            </div>
+
+            <!-- Menu Items -->
+            <div class="flex-grow-1 p-3">
+                <div *ngFor="let item of menuItems" class="mb-3">
+                    <a [routerLink]="item.route" 
+                       routerLinkActive="bg-primary" 
+                       class="flex align-items-center cursor-pointer p-3 border-round-lg hover:surface-hover transition-colors transition-duration-150">
+                        <i [class]="'pi ' + item.icon + ' mr-2 text-700'"></i>
+                        <span class="font-medium text-700">{{item.label}}</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- User Info -->
+            <div class="p-4 border-top-1 surface-border">
+                <div class="flex align-items-center">
+                    <span class="text-sm text-700">{{userEmail}}</span>
+                    <button pButton icon="pi pi-sign-out" 
+                            class="p-button-text p-button-rounded ml-auto" 
+                            (click)="logout()"
+                            pTooltip="Logout">
+                    </button>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Mobile Sidebar -->
+    <p-sidebar [(visible)]="sidebarVisible" 
+               [showCloseIcon]="false" 
+               [modal]="true" 
+               styleClass="w-18rem md:hidden">
+        <div class="flex flex-column h-full">
+            <div class="p-4 border-bottom-1 surface-border">
+                <span class="text-xl font-medium text-900">Smart Ranks</span>
+            </div>
+            <div class="flex-grow-1 p-3">
+                <div *ngFor="let item of menuItems" class="mb-3">
+                    <a [routerLink]="item.route" 
+                       routerLinkActive="bg-primary"
+                       class="flex align-items-center cursor-pointer p-3 border-round-lg hover:surface-hover transition-colors transition-duration-150">
+                        <i [class]="'pi ' + item.icon + ' mr-2 text-700'"></i>
+                        <span class="font-medium text-700">{{item.label}}</span>
+                    </a>
+                </div>
+            </div>
+            <div class="p-4 border-top-1 surface-border">
+                <div class="flex align-items-center">
+                    <span class="text-sm text-700">{{userEmail}}</span>
+                    <button pButton icon="pi pi-sign-out" 
+                            class="p-button-text p-button-rounded ml-auto" 
+                            (click)="logout()"
+                            pTooltip="Logout">
+                    </button>
+                </div>
+            </div>
+        </div>
+    </p-sidebar>
+
+    <!-- Main Content -->
+    <div class="flex-grow-1">
+        <!-- Top Bar (solo visible en móvil) -->
+        <div class="surface-card shadow-2 py-3 px-4 flex align-items-center justify-content-between md:hidden">
+            <button pButton icon="pi pi-bars" 
+                    class="p-button-text p-button-rounded" 
+                    (click)="toggleSidebar()">
+            </button>
+            <span class="text-xl font-medium">Smart Ranks</span>
+            <div style="width: 2.5rem"><!-- Spacer --></div>
+        </div>
+
+        <!-- Page Content -->
+        <div class="p-4">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>
