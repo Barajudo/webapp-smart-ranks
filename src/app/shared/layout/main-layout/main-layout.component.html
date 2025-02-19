@@ -1,31 +1,37 @@
 <!-- src/app/shared/layout/main-layout/main-layout.component.html -->
-<div class="min-h-screen bg-gray-100">
+<div class="min-h-screen bg-slate-50">
     <!-- Sidebar Fijo -->
     <aside class="fixed left-0 top-0 z-40 h-screen w-72 bg-white shadow-lg hidden md:block">
         <div class="flex h-full flex-col">
             <!-- Logo/Title -->
-            <div class="flex items-center px-6 py-4 border-b">
-                <span class="text-xl font-medium text-gray-800">Smart Ranks</span>
+            <div class="flex items-center gap-3 px-6 py-5 border-b bg-slate-50">
+                <i class="pi pi-chart-bar text-blue-600 text-2xl"></i>
+                <span class="text-xl font-semibold text-slate-800">Smart Ranks</span>
             </div>
 
             <!-- Menu Items -->
-            <div class="flex-1 px-4 py-3">
+            <div class="flex-1 px-4 py-5">
                 <div *ngFor="let item of menuItems" class="mb-2">
                     <a [routerLink]="item.route" 
                        routerLinkActive="bg-blue-50 text-blue-600" 
-                       class="flex items-center px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors duration-150">
-                        <i [class]="'pi ' + item.icon + ' mr-3'"></i>
+                       class="flex items-center px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors duration-150">
+                        <i [class]="item.icon + ' mr-3 text-lg'"></i>
                         <span class="font-medium">{{item.label}}</span>
                     </a>
                 </div>
             </div>
 
             <!-- User Info -->
-            <div class="border-t px-6 py-4">
-                <div class="flex items-center">
-                    <span class="text-sm text-gray-600">{{userEmail}}</span>
-                    <button pButton icon="pi pi-sign-out" 
-                            class="p-button-text p-button-rounded ml-auto" 
+            <div class="border-t px-6 py-4 bg-slate-50">
+                <div class="flex items-center gap-3">
+                    <i class="pi pi-user text-slate-400"></i>
+                    <div class="flex-1">
+                        <span class="text-sm font-medium text-slate-700 block">{{userEmail}}</span>
+                        <span class="text-xs text-slate-500 capitalize">{{userRole}} Account</span>
+                    </div>
+                    <button pButton 
+                            icon="pi pi-sign-out" 
+                            class="p-button-rounded p-button-text p-button-plain"
                             (click)="logout()"
                             pTooltip="Logout">
                     </button>
@@ -37,12 +43,19 @@
     <!-- Mobile Header -->
     <div class="md:hidden bg-white shadow-sm fixed top-0 left-0 right-0 z-30">
         <div class="flex items-center justify-between px-4 py-3">
-            <button pButton icon="pi pi-bars" 
-                    class="p-button-text" 
+            <button pButton 
+                    icon="pi pi-bars"
+                    class="p-button-text p-button-plain"
                     (click)="toggleSidebar()">
             </button>
-            <span class="text-xl font-medium">Smart Ranks</span>
-            <div class="w-10"></div>
+            <div class="flex items-center gap-2">
+                <i class="pi pi-chart-bar text-blue-600 text-xl"></i>
+                <span class="text-lg font-semibold text-slate-800">Smart Ranks</span>
+            </div>
+            <button pButton 
+                    icon="pi pi-user"
+                    class="p-button-text p-button-plain">
+            </button>
         </div>
     </div>
 
@@ -55,7 +68,7 @@
     </p-sidebar>
 
     <!-- Main Content -->
-    <div class="md:ml-72 pt-16 md:pt-0">
+    <div class="md:ml-72 pt-16 md:pt-0 min-h-screen">
         <div class="p-4 sm:p-6 lg:p-8">
             <router-outlet></router-outlet>
         </div>
@@ -65,18 +78,31 @@
 <!-- Sidebar Content Template -->
 <ng-template #sidebarContent>
     <div class="flex flex-col h-full">
-        <div class="flex items-center px-6 py-4 border-b">
-            <span class="text-xl font-medium text-gray-800">Smart Ranks</span>
+        <div class="flex items-center gap-3 px-6 py-5 border-b bg-slate-50">
+            <i class="pi pi-chart-bar text-blue-600 text-2xl"></i>
+            <span class="text-xl font-semibold text-slate-800">Smart Ranks</span>
         </div>
-        <div class="flex-1 px-4 py-3">
+        <div class="flex-1 px-4 py-5">
             <div *ngFor="let item of menuItems" class="mb-2">
                 <a [routerLink]="item.route" 
                    routerLinkActive="bg-blue-50 text-blue-600"
-                   class="flex items-center px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors duration-150">
-                    <i [class]="'pi ' + item.icon + ' mr-3'"></i>
+                   class="flex items-center px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors duration-150">
+                    <i [class]="item.icon + ' mr-3 text-lg'"></i>
                     <span class="font-medium">{{item.label}}</span>
                 </a>
             </div>
         </div>
+        <div class="border-t px-6 py-4 bg-slate-50">
+            <div class="flex items-center gap-3">
+                <i class="pi pi-user text-slate-400"></i>
+                <div class="flex-1">
+                    <span class="text-sm font-medium text-slate-700 block">{{userEmail}}</span>
+                    <span class="text-xs text-slate-500 capitalize">{{userRole}} Account</span>
+                </div>
+            </div>
+        </div>
     </div>
 </ng-template>
+
+<p-toast></p-toast>
+<p-confirmDialog [style]="{width: '450px'}" [closeOnEscape]="true"></p-confirmDialog>

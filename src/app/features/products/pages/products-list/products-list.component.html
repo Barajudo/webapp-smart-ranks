@@ -135,7 +135,7 @@
         </label>
         <textarea
           id="description"
-          pInputTextarea
+          pTextarea
           [(ngModel)]="product.description"
           required
           rows="3"
@@ -181,7 +181,8 @@
         >
           Status
         </label>
-        <p-dropdown
+        <p-select
+        appendTo="body"
           id="status"
           [options]="[
             { label: 'Active', value: 'active' },
@@ -191,7 +192,7 @@
           placeholder="Select Status"
           class="w-full"
         >
-        </p-dropdown>
+        </p-select>
       </div>
     </div>
   </ng-template>

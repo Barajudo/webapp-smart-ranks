@@ -1,3 +1,4 @@
+// src/app/features/products/products.module.ts
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -11,11 +12,12 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
-import { Textarea } from 'primeng/inputtextarea';
+import { TextareaModule } from 'primeng/textarea';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectButtonModule } from 'primeng/selectbutton';
 import { TagModule } from 'primeng/tag';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { SelectModule } from 'primeng/select';
 
 @NgModule({
   declarations: [
@@ -31,11 +33,12 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     ButtonModule,
     DialogModule,
     InputTextModule,
-    Textarea,
+    TextareaModule,
     InputNumberModule,
-    DropdownModule,
+    SelectButtonModule,
     TagModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    SelectModule
   ]
 })
 export class ProductsModule { }

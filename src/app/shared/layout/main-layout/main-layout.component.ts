@@ -1,43 +1,40 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+// src/app/shared/layout/main-layout/main-layout.component.ts
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../features/auth/services/auth.service';
-
-interface MenuItem {
-  label: string;
-  icon: string;
-  route: string;
-  roles?: string[];
-}
+import { MenuItem } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-main-layout',
-  templateUrl: './main-layout.component.html'
+  templateUrl: './main-layout.component.html',
+  providers: [ConfirmationService, MessageService]
 })
 export class MainLayoutComponent implements OnInit {
-  sidebarVisible = true;
-  isMobile = false;
+  sidebarVisible = false;
   userEmail: string | null = null;
   userRole: string | null = null;
 
-  menuItems: MenuItem[] = [
+  menuItems = [
     {
       label: 'Dashboard',
-      icon: 'pi-home',
-      route: '/dashboard',
+      icon: 'pi pi-home',
+      route: '/dashboard'
     },
     {
       label: 'Products',
-      icon: 'pi-shopping-cart',
-      route: '/products',
+      icon: 'pi pi-box',
+      route: '/products'
     },
     {
       label: 'Invoices',
-      icon: 'pi-file',
-      route: '/invoices',
+      icon: 'pi pi-file',
+      route: '/invoices'
     },
     {
       label: 'Users',
-      icon: 'pi-users',
+      icon: 'pi pi-users',
       route: '/users',
       roles: ['admin']
     }
@@ -45,10 +42,10 @@ export class MainLayoutComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private authService: AuthService
-  ) {
-    this.checkScreenSize();
-  }
+    private authService: AuthService,
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService
+  ) {}
 
   ngOnInit() {
     this.userEmail = localStorage.getItem('userEmail');
@@ -58,20 +55,20 @@ export class MainLayoutComponent implements OnInit {
     );
   }
 
-  @HostListener('window:resize')
-  checkScreenSize() {
-    this.isMobile = window.innerWidth < 768;
-    if (this.isMobile) {
-      this.sidebarVisible = false;
-    }
+  logout() {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to log out?',
+      header: 'Logout Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.authService.logout();
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Logged out successfully' });
+        this.router.navigate(['/auth/login']);
+      }
+    });
   }
 
   toggleSidebar() {
     this.sidebarVisible = !this.sidebarVisible;
-  }
-
-  logout() {
-    this.authService.logout();
-    this.router.navigate(['/auth/login']);
   }
 }
