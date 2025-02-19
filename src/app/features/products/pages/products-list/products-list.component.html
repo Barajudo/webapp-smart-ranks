@@ -1,0 +1,221 @@
+<div class="bg-white rounded-lg shadow-sm p-6">
+  <p-toast />
+  <p-toolbar styleClass="mb-6 bg-gray-50 border border-gray-200">
+    <ng-template pTemplate="left">
+      <button
+        pButton
+        pRipple
+        label="New"
+        icon="pi pi-plus"
+        class="bg-green-600 hover:bg-green-700 mr-2"
+        (click)="openNew()"
+      ></button>
+    </ng-template>
+  </p-toolbar>
+
+  <p-table
+    #dt
+    [value]="products"
+    [rows]="10"
+    [paginator]="true"
+    [loading]="loading"
+    [rowHover]="true"
+    dataKey="id"
+    styleClass="p-datatable-sm"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [showCurrentPageReport]="true"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex items-center justify-between mb-4">
+        <h5 class="text-xl font-medium text-gray-700 m-0">Manage Products</h5>
+        <span class="relative">
+          <i class="pi pi-search absolute left-3 top-2.5 text-gray-400"></i>
+          <input
+            pInputText
+            type="text"
+            (input)="dt.filterGlobal($event.target, 'contains')"
+            placeholder="Search..."
+            class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
+        </span>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr class="bg-gray-50">
+        <th
+          pSortableColumn="name"
+          class="min-w-[15rem] p-4 font-medium text-gray-700"
+        >
+          Name <p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="price" class="p-4 font-medium text-gray-700">
+          Price <p-sortIcon field="price"></p-sortIcon>
+        </th>
+        <th pSortableColumn="stock" class="p-4 font-medium text-gray-700">
+          Stock <p-sortIcon field="stock"></p-sortIcon>
+        </th>
+        <th pSortableColumn="status" class="p-4 font-medium text-gray-700">
+          Status <p-sortIcon field="status"></p-sortIcon>
+        </th>
+        <th class="w-[120px]"></th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-product>
+      <tr class="border-b border-gray-100 hover:bg-gray-50">
+        <td class="p-4">{{ product.name }}</td>
+        <td class="p-4">{{ product.price | currency : "USD" }}</td>
+        <td class="p-4">{{ product.stock }}</td>
+        <td class="p-4">
+          <p-tag
+            [severity]="product.status === 'active' ? 'success' : 'danger'"
+            [value]="product.status === 'active' ? 'Active' : 'Inactive'"
+          >
+          </p-tag>
+        </td>
+        <td class="p-4">
+          <div class="flex gap-2">
+            <button
+              pButton
+              pRipple
+              icon="pi pi-pencil"
+              class="p-button-rounded p-button-success"
+              (click)="editProduct(product)"
+            ></button>
+            <button
+              pButton
+              pRipple
+              icon="pi pi-trash"
+              class="p-button-rounded p-button-danger"
+              (click)="deleteProduct(product)"
+            ></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog
+  [(visible)]="productDialog"
+  [modal]="true"
+  styleClass="max-w-2xl mx-auto"
+>
+  <ng-template pTemplate="header">
+    <h3 class="text-xl font-medium text-gray-900">Product Details</h3>
+  </ng-template>
+
+  <ng-template pTemplate="content">
+    <div class="space-y-6">
+      <div>
+        <label for="name" class="block text-sm font-medium text-gray-700 mb-2"
+          >Name</label
+        >
+        <input
+          type="text"
+          pInputText
+          id="name"
+          [(ngModel)]="product.name"
+          required
+          autofocus
+          class="w-full"
+        />
+        <small class="text-red-500 mt-1" *ngIf="submitted && !product.name">
+          Name is required.
+        </small>
+      </div>
+
+      <div>
+        <label
+          for="description"
+          class="block text-sm font-medium text-gray-700 mb-2"
+        >
+          Description
+        </label>
+        <textarea
+          id="description"
+          pInputTextarea
+          [(ngModel)]="product.description"
+          required
+          rows="3"
+          class="w-full"
+        >
+        </textarea>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label
+            for="price"
+            class="block text-sm font-medium text-gray-700 mb-2"
+          >
+            Price
+          </label>
+          <p-inputNumber
+            id="price"
+            [(ngModel)]="product.price"
+            mode="currency"
+            currency="USD"
+            locale="en-US"
+            class="w-full"
+          >
+          </p-inputNumber>
+        </div>
+        <div>
+          <label
+            for="stock"
+            class="block text-sm font-medium text-gray-700 mb-2"
+          >
+            Stock
+          </label>
+          <p-inputNumber id="stock" [(ngModel)]="product.stock" class="w-full">
+          </p-inputNumber>
+        </div>
+      </div>
+
+      <div>
+        <label
+          for="status"
+          class="block text-sm font-medium text-gray-700 mb-2"
+        >
+          Status
+        </label>
+        <p-dropdown
+          id="status"
+          [options]="[
+            { label: 'Active', value: 'active' },
+            { label: 'Inactive', value: 'inactive' }
+          ]"
+          [(ngModel)]="product.status"
+          placeholder="Select Status"
+          class="w-full"
+        >
+        </p-dropdown>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end gap-3">
+      <button
+        pButton
+        pRipple
+        label="Cancel"
+        icon="pi pi-times"
+        class="p-button-text"
+        (click)="hideDialog()"
+      ></button>
+      <button
+        pButton
+        pRipple
+        label="Save"
+        icon="pi pi-check"
+        class="p-button-text"
+        (click)="saveProduct()"
+      ></button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog styleClass="max-w-lg mx-auto"></p-confirmDialog>

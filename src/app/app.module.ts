@@ -7,33 +7,31 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
-import Aura from '@primeng/themes/aura';
+import Material from '@primeng/themes/material';
 import { LayoutModule } from './shared/layout/layout.module';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
-    LayoutModule
+    LayoutModule,
   ],
   providers: [
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
-        preset: Aura,
+        preset: Material,
         options: {
           prefix: 'p',
-          darkModeSelector: 'system',
-          cssLayer: false,
+          darkModeSelector: '.dark-theme',
         },
       },
+      ripple: true
     }),
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

@@ -3,14 +3,15 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
 import { MainLayoutComponent } from './shared/layout/main-layout/main-layout.component';
 
-//TODO: Componente temporal
+// Componente temporal
 import { Component } from '@angular/core';
 
 @Component({
   template: `
-    <div class="p-4">
-      <h2>Welcome to Smart Ranks</h2>
-      <p>Dashboard coming soon...</p>
+    <div class="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-gray-50">
+      <div class="text-center">
+        <h2 class="text-4xl font-bold text-gray-900 mb-4">Welcome to Smart Ranks</h2>
+      </div>
     </div>
   `
 })
@@ -29,6 +30,10 @@ const routes: Routes = [
       {
         path: 'dashboard',
         component: DashboardComponent
+      },
+      {
+        path: 'products',
+        loadChildren: () => import('./features/products/products.module').then(m => m.ProductsModule)
       },
       {
         path: '',
