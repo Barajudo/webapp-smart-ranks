@@ -99,7 +99,7 @@ export class ProductsListComponent implements OnInit {
 
   editProduct(product: any) {
     const transformedProduct: Product = {
-      id: product._id,
+      _id: product._id,
       name: product.name,
       description: product.description,
       price: product.price,
@@ -114,7 +114,7 @@ export class ProductsListComponent implements OnInit {
     this.submitted = true;
 
     if (this.product.name) {
-      if (this.product.id) {
+      if (this.product._id) {
         const updateData: UpdateProductDto = {
           name: this.product.name,
           description: this.product.description,
@@ -124,7 +124,7 @@ export class ProductsListComponent implements OnInit {
         };
 
         this.productsService
-          .updateProduct(this.product.id, updateData)
+          .updateProduct(this.product._id, updateData)
           .subscribe({
             next: (result) => {
               this.messageService.add({
