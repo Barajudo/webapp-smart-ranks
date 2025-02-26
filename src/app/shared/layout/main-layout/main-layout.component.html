@@ -27,8 +27,8 @@
       <div class="border-t px-6 py-4 bg-slate-50">
         <div class="flex items-center gap-3">
           <i class="pi pi-user text-slate-400"></i>
-          <div class="flex-1">
-            <span class="text-sm font-medium text-slate-700 block">{{
+          <div class="flex-1 min-w-0">
+            <span class="text-sm font-medium text-slate-700 block truncate">{{
               userEmail
             }}</span>
             <span class="text-xs text-slate-500 capitalize"
@@ -38,7 +38,7 @@
           <button
             pButton
             icon="pi pi-sign-out"
-            class="p-button-rounded p-button-text p-button-plain"
+            class="p-button-rounded p-button-text p-button-plain flex-shrink-0"
             (click)="logout()"
             pTooltip="Logout"
           ></button>
@@ -86,7 +86,7 @@
   </div>
 </div>
 
-<!-- Sidebar Content Template -->
+<!-- Sidebar Content Template - Actualizado para usar filteredMenuItems -->
 <ng-template #sidebarContent>
   <div class="flex flex-col h-full">
     <div class="flex items-center gap-3 px-6 py-5 border-b bg-slate-50">
@@ -108,8 +108,8 @@
     <div class="border-t px-6 py-4 bg-slate-50">
       <div class="flex items-center gap-3">
         <i class="pi pi-user text-slate-400"></i>
-        <div class="flex-1">
-          <span class="text-sm font-medium text-slate-700 block">{{
+        <div class="flex-1 min-w-0">
+          <span class="text-sm font-medium text-slate-700 block truncate">{{
             userEmail
           }}</span>
           <span class="text-xs text-slate-500 capitalize"
