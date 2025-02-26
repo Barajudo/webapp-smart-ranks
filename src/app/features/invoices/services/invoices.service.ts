@@ -13,8 +13,7 @@ export class InvoicesService {
   private apiUrl = `${environment.apiUrl}/invoices`;
 
   constructor(
-    private http: HttpClient,
-    private productsService: ProductsService
+    private http: HttpClient
   ) {}
 
   getInvoices(): Observable<Invoice[]> {

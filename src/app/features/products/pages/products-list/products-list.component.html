@@ -59,7 +59,7 @@
         <th pSortableColumn="status" class="p-4 font-medium text-gray-700">
           Status <p-sortIcon field="status"></p-sortIcon>
         </th>
-        <th class="w-[120px]"></th>
+        <th *ngIf="currentUserRole == 'admin'" class="w-[120px]"></th>
       </tr>
     </ng-template>
 
@@ -75,7 +75,7 @@
           >
           </p-tag>
         </td>
-        <td class="p-4">
+        <td *ngIf="currentUserRole == 'admin'" class="p-4">
           <div class="flex gap-2" *ngIf="currentUserRole === 'admin'">
             <button
               pButton

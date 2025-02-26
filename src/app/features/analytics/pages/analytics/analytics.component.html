@@ -1,6 +1,5 @@
 <div class="bg-white rounded-lg shadow-sm p-6">
   <p-toast></p-toast>
-
   <p-toolbar styleClass="mb-6 bg-gray-50 border border-gray-200">
     <ng-template pTemplate="left">
       <div class="flex items-center gap-4">
@@ -11,15 +10,18 @@
           placeholder="Select a User"
           [(ngModel)]="selectedUserId"
           (onChange)="onUserChange()"
+          styleClass="p-dropdown-sm"
         ></p-dropdown>
-        <span class="ml-4 text-gray-600">
-          Last Month Purchases:
-          <strong>{{ monthlyCount }}</strong>
-        </span>
+        <div class="ml-4 px-4 py-2 bg-blue-50 rounded-lg border border-blue-100">
+          <span class="text-gray-700">
+            Last Month Purchases: 
+            <span class="font-semibold text-blue-700">{{ monthlyCount }}</span>
+          </span>
+        </div>
       </div>
     </ng-template>
   </p-toolbar>
-
+  
   <p-table
     [value]="invoices"
     [rows]="10"
@@ -35,11 +37,12 @@
     <ng-template pTemplate="caption">
       <div class="flex items-center justify-between mb-4">
         <h5 class="text-xl font-medium text-gray-700 m-0">
+          <i class="pi pi-shopping-cart mr-2 text-blue-600"></i>
           Invoices (Last Month)
         </h5>
       </div>
     </ng-template>
-
+    
     <ng-template pTemplate="header">
       <tr class="bg-gray-50">
         <th class="p-4 font-medium text-gray-700">Invoice #</th>
@@ -48,29 +51,42 @@
         <th class="p-4 font-medium text-gray-700 text-right">Total</th>
       </tr>
     </ng-template>
-
+    
     <ng-template pTemplate="body" let-invoice>
       <tr class="border-b border-gray-100 hover:bg-gray-50">
-        <td class="p-4">{{ invoice._id }}</td>
         <td class="p-4">
+          <span class="font-medium text-blue-600">{{ invoice._id }}</span>
+        </td>
+        <td class="p-4 text-gray-700">
           {{ invoice.createdAt | date : "medium" }}
         </td>
         <td class="p-4">
-          <div *ngFor="let item of invoice.items" class="mb-1 text-gray-600">
-            Product ID: {{ item.productId }}
-            <span class="text-gray-500">(x{{ item.quantity }})</span>
+          <div *ngFor="let item of invoice.items" class="mb-2 text-gray-700">
+            <div class="flex items-start">
+              <i class="pi pi-tag text-blue-500 mr-2 mt-1"></i>
+              <div>
+                <span class="font-medium">{{ getProductName(item.productId) }}</span>
+                <span class="ml-1 text-xs text-gray-500">(ID: {{ item.productId }})</span>
+                <span class="ml-2 text-sm px-2 py-1 bg-gray-100 rounded-full text-gray-600">
+                  x{{ item.quantity }}
+                </span>
+              </div>
+            </div>
           </div>
         </td>
         <td class="p-4 text-right font-medium">
-          {{ invoice.total | currency : "USD" }}
+          <span class="text-green-700">{{ invoice.total | currency : "USD" }}</span>
         </td>
       </tr>
     </ng-template>
-
+    
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="4" class="text-center p-4 text-gray-500">
-          No invoices in the last month
+        <td colspan="4" class="text-center p-6">
+          <div class="flex flex-col items-center text-gray-500">
+            <i class="pi pi-inbox text-4xl mb-4 text-gray-300"></i>
+            <span>No invoices in the last month</span>
+          </div>
         </td>
       </tr>
     </ng-template>

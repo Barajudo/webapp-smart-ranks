@@ -14,6 +14,7 @@ import { Table } from 'primeng/table';
 export class InvoicesListComponent implements OnInit {
   invoices: Invoice[] = [];
   products: Product[] = [];
+  allProducts: Product[] = [];
   loading = false;
   createDialog = false;
   viewDialog = false;
@@ -34,7 +35,7 @@ export class InvoicesListComponent implements OnInit {
     this.currentUserId = localStorage.getItem('userId') || '';
 
     this.loadInvoices();
-    this.loadProducts();
+    this.loadAllProducts();
   }
 
   loadInvoices() {
@@ -47,33 +48,43 @@ export class InvoicesListComponent implements OnInit {
           this.loading = false;
         },
         error: (error) => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: error.message });
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.message,
+          });
           this.loading = false;
-        }
+        },
       });
     } else {
       this.invoicesService.getInvoicesByUser(this.currentUserId).subscribe({
-        next: (data) => {
-          console.log({data})
-          this.invoices = data;
+        next: (datas) => {
+          console.log({ datas });
+          this.invoices = datas;
           this.loading = false;
         },
         error: (error) => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: error.message });
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.message,
+          });
           this.loading = false;
-        }
+        },
       });
     }
   }
 
-  loadProducts() {
+  loadAllProducts() {
     this.productsService.getProducts().subscribe({
       next: (data) => {
+        this.allProducts = data;
+        this.productsMap = new Map(
+          this.allProducts.map((product) => [product._id!, product])
+        );
+
         this.products = data.filter(
           (p) => p.status === 'active' && p.stock > 0
-        );
-        this.productsMap = new Map(
-          this.products.map((product) => [product._id!, product])
         );
       },
       error: (error) => {
@@ -91,14 +102,13 @@ export class InvoicesListComponent implements OnInit {
       this.messageService.add({
         severity: 'error',
         summary: 'Unauthorized',
-        detail: 'Only admin can view invoice details'
+        detail: 'Only admin can view invoice details',
       });
       return;
     }
     this.selectedInvoice = invoice;
     this.viewDialog = true;
   }
-  
 
   getProductName(productId: string): string {
     const product = this.productsMap.get(productId);

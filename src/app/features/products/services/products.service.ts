@@ -61,6 +61,11 @@ export class ProductsService {
     );
   }
 
+  softDeleteProduct(id: string): Observable<Product> {
+    const updates: UpdateProductDto = { status: 'inactive' };
+    return this.updateProduct(id, updates);
+  }
+
   deleteProduct(id: string): Observable<boolean> {
     const url = `${this.apiUrl}/${id}`;
     return this.http.delete<boolean>(url).pipe(

@@ -78,8 +78,8 @@ export class ProductsListComponent implements OnInit {
       return;
     }
     this.confirmationService.confirm({
-      message: `Are you sure you want to delete ${product.name}?`,
-      header: 'Confirm Deletion',
+      message: `Are you sure you want to disable ${product.name}?`,
+      header: 'Confirm Disabling',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         const productId = product._id;
@@ -91,22 +91,22 @@ export class ProductsListComponent implements OnInit {
           });
           return;
         }
-
-        this.productsService.deleteProduct(productId).subscribe({
+        
+        this.productsService.softDeleteProduct(productId).subscribe({
           next: (result) => {
             this.messageService.add({
               severity: 'success',
               summary: 'Success',
-              detail: 'Product deleted successfully',
+              detail: 'Product disabled successfully',
             });
             this.loadProducts();
           },
           error: (error) => {
-            console.error('Delete error:', error);
+            console.error('Disable error:', error);
             this.messageService.add({
               severity: 'error',
               summary: 'Error',
-              detail: error.message || 'Error deleting product',
+              detail: error.message || 'Error disabling product',
             });
           },
         });
