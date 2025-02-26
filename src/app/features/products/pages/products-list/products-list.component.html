@@ -1,6 +1,6 @@
 <div class="bg-white rounded-lg shadow-sm p-6">
   <p-toast />
-  <p-toolbar styleClass="mb-6 bg-gray-50 border border-gray-200">
+  <p-toolbar *ngIf="currentUserRole == 'admin'" styleClass="mb-6 bg-gray-50 border border-gray-200">
     <ng-template pTemplate="left">
       <button
         pButton
@@ -9,7 +9,6 @@
         icon="pi pi-plus"
         class="bg-green-600 hover:bg-green-700 mr-2"
         (click)="openNew()"
-        [disabled]="currentUserRole !== 'admin'"
       ></button>
     </ng-template>
   </p-toolbar>

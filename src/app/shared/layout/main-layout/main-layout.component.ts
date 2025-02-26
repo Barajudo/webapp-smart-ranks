@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../features/auth/services/auth.service';
-import { MenuItem } from 'primeng/api';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 
@@ -14,7 +13,6 @@ export class MainLayoutComponent implements OnInit {
   sidebarVisible = false;
   userEmail: string | null = null;
   userRole: string | null = null;
-
   menuItems = [
     {
       label: 'Dashboard',
@@ -40,9 +38,11 @@ export class MainLayoutComponent implements OnInit {
       label: 'Analytics',
       icon: 'pi pi-chart-bar',
       route: '/analytics',
-      roles: ['admin'] 
+      roles: ['admin']
     }
   ];
+
+  filteredMenuItems: any[] = [];
 
   constructor(
     private router: Router,
@@ -54,17 +54,26 @@ export class MainLayoutComponent implements OnInit {
   ngOnInit() {
     this.userEmail = localStorage.getItem('userEmail');
     this.userRole = this.authService.getUserRole();
-    
+    this.filterMenuItems();
+  }
+
+  filterMenuItems() {
+    this.filteredMenuItems = this.menuItems.filter(item => {
+      if (!item.roles) {
+        return true;
+      }
+      return this.userRole && item.roles.includes(this.userRole);
+    });
   }
 
   logout() {
     this.confirmationService.confirm({
-      message: 'Are you sure you want to log out?',
-      header: 'Logout Confirmation',
+      message: '¿Estás seguro de que quieres cerrar sesión?',
+      header: 'Confirmación de cierre de sesión',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.authService.logout();
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Logged out successfully' });
+        this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Sesión cerrada correctamente' });
         this.router.navigate(['/auth/login']);
       }
     });
